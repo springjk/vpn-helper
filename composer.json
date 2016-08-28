@@ -1,0 +1,6 @@
+{
+    "require": {
+        "league/climate": "^3.2",
+        "rodneyrehm/plist": "^2.0"
+    }
+}
