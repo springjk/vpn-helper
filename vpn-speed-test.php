@@ -49,6 +49,14 @@ class VPN
             $this->cli->br()->out('正在连接' . $fastest_vpn_name . '…');
 
             $this->connection($fastest_vpn_name);
+
+            do {
+                usleep(200);
+
+                $status = $this->checkConnectionStatus($fastest_vpn_name);
+            } while (!$status);
+
+            $this->cli->br()->info('success,enjoy!');
         }
 
         // var_dump($result);
@@ -107,7 +115,7 @@ class VPN
      *
      * @return array                  ping result
      */
-    private function pingTest($servers, $show_progress = false)
+    public function pingTest($servers, $show_progress = false)
     {
         $dir = __DIR__ . '/logs/';
 
@@ -245,6 +253,54 @@ class VPN
         exec($script_code);
     }
 
+    /**
+     * check vpn connection status
+     *
+     * @param  string $vpn_connection_name vpn_connection_name
+     *
+     * @return bool                        connection status
+     */
+    public function checkConnectionStatus($vpn_connection_name)
+    {
+        $os_type = $this->getOsType();
+
+        switch ($os_type) {
+            case 'mac os':
+                exec('ifconfig |grep ppp0', $result);
+                break;
+            case 'windows':
+                exec('ipconfig |find /i "' . $vpn_connection_name . '"', $result);
+                break;
+
+            default:
+                $result = '';
+                break;
+        }
+
+        if ($result !== '') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * get php server os type
+     *
+     * @return string os type
+     */
+    public function getOsType()
+    {
+        if ((stristr(PHP_OS, 'linux') !== false) || (stristr(PHP_OS, 'freebsd') !== false)) {
+            return 'linux';
+        } else if ((stristr(PHP_OS, 'darwin') !== false)) {
+            return 'mac os';
+        } else if (stristr(PHP_OS, 'win') !== false) {
+            return 'windows';
+        } else {
+            return 'others';
+        }
+    }
 }
 
 $vpn = new VPN();
