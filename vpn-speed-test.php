@@ -61,7 +61,7 @@ class VPN
 
         // var_dump($result);
 
-        // C:\Users\jiangkun\AppData\Roaming\Microsoft\Network\Connections\Pbk
+        // %appdata%\Microsoft\Network\Connections\Pbk
         // Get-VpnConnection
         // 测速
         // download google file
@@ -73,13 +73,15 @@ class VPN
         // add art title
         //  查看所有网络连接列表
         // networksetup listallnetworkservices
-
+        // exec("powershell Get-VpnConnection", $output);
         // windows
         // http://superuser.com/questions/950257/list-vpn-connections-and-properties-in-command-prompt
 
         // http://blog.affirmix.com/2011/01/12/how-to-configure-a-vpn-in-mac-os-x-usingapplescript/
 
         // netstat -i 检查 ppp0 判断连接状态
+        //
+        // https://technet.microsoft.com/en-us/library/jj613766(v=ws.11).aspx
     }
 
     /**
@@ -88,6 +90,33 @@ class VPN
      * @return array VPN Server list
      */
     public function getServers()
+    {
+        $os_type = $this->getOSType();
+
+        switch ($os_type) {
+            case 'linux':
+                // to do
+                break;
+            case 'macOS':
+                $servers = $this->getServersFromMacOS();
+                break;
+            case 'windows':
+                $servers = $this->getServersFromWindows();
+                break;
+            default:
+                $servers = [];
+                break;
+        }
+
+        return $servers;
+    }
+
+    /**
+     * get VPN server list from local pc config file from macOS
+     *
+     * @return array VPN Server list
+     */
+    private function getServersFromMacOS()
     {
         $servers = [];
 
@@ -101,6 +130,53 @@ class VPN
                     'type' => $value['Interface']['SubType'],
                     'host' => $value['PPP']['CommRemoteAddress'],
                 ];
+            }
+        }
+
+        return $servers;
+    }
+
+    /**
+     * get VPN server list from local pc config file from windows
+     *
+     * @return array VPN Server list
+     */
+    private function getServersFromWindows()
+    {
+        $servers = [];
+
+        $i = 0;
+
+        exec("powershell Get-VpnConnection", $output);
+
+        foreach ($output as $key => $value) {
+            $explode_array = explode(':', $value);
+
+            if (count($explode_array === 2)) {
+
+                switch (trim($explode_array[0])) {
+                    case 'Name':
+                        if (isset($servers[$i]['name'])) {
+                            $i++;
+                        }
+
+                        $servers[$i]['name'] = trim($explode_array[1]);
+
+                        break;
+                    case 'TunnelType':
+                        $type = trim($explode_array[1]);
+
+                        $servers[$i]['type'] = $type === 'Automatic' ? 'PPTP' : strtoupper($type);
+
+                        break;
+                    case 'ServerAddress':
+                        $servers[$i]['host'] = trim($explode_array[1]);
+
+                        break;
+                    default:
+                        // do nothing
+                        break;
+                }
             }
         }
 
@@ -262,10 +338,13 @@ class VPN
      */
     public function checkConnectionStatus($vpn_connection_name)
     {
-        $os_type = $this->getOsType();
+        $os_type = $this->getOSType();
 
         switch ($os_type) {
-            case 'mac os':
+            case 'linux':
+                // todo
+                break;
+            case 'macOS':
                 exec('ifconfig |grep ppp0', $result);
                 break;
             case 'windows':
@@ -285,16 +364,16 @@ class VPN
     }
 
     /**
-     * get php server os type
+     * get php server OS type
      *
-     * @return string os type
+     * @return string OS type
      */
-    public function getOsType()
+    public function getOSType()
     {
         if ((stristr(PHP_OS, 'linux') !== false) || (stristr(PHP_OS, 'freebsd') !== false)) {
             return 'linux';
         } else if ((stristr(PHP_OS, 'darwin') !== false)) {
-            return 'mac os';
+            return 'macOS';
         } else if (stristr(PHP_OS, 'win') !== false) {
             return 'windows';
         } else {
