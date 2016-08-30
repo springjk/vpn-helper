@@ -211,7 +211,20 @@ class VPN
 
         # 后台运行 ping 并将结果返回至 log 文件中
         foreach ($servers as $key => $server) {
-            exec('ping -c 5 ' . $server['host'] . ' > ' . $dir . $key . '.log &');
+            $os_type = $this->getOSType();
+
+            switch ($os_type) {
+                case 'macOS':
+                    exec('ping -c 5 ' . $server['host'] . ' > ' . $dir . $key . '.log &');
+                    break;
+                case 'windows':
+                    exec('start /b ping -n 5 ' . $server['host'] . ' > ' . $dir . $key . '.log');
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+
         }
 
         $i = 0;
