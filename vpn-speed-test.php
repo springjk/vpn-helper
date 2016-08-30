@@ -271,6 +271,12 @@ class VPN
 
         $last_line = array_pop($data);
 
+        $os_type = $this->getOSType();
+
+        if ($os_type === 'windows') {
+            $last_line = iconv( 'gbk', 'utf-8', $last_line);
+        }
+
         if (strpos($last_line, '100.0% packet loss') || strpos($last_line, '100% 丢失')) {
             $result = [
                 'min' => 'down',
@@ -280,9 +286,6 @@ class VPN
 
             return $result;
         } else if ((strpos($last_line, 'avg')) || (strpos($last_line, '平均'))) {
-
-            $os_type = $this->getOSType();
-
             switch ($os_type) {
                 case 'linux':
                     // todo
