@@ -214,7 +214,7 @@ class VPN
             exec('ping -c 5 ' . $server['host'] . ' > ' . $dir . $key . '.log &');
         }
 
-        $avgs = [];
+        $i = 0;
 
         if ($show_progress) {
             $progress = $this->cli->br()->progress()->total(count($servers));
@@ -225,25 +225,13 @@ class VPN
         while (true) {
             foreach ($servers_temp as $key => $server) {
 
-                $file_name = $key . '.log';
+                $file_path = $dir . $key . '.log';
 
-                $data = file($dir . $file_name);
+                $result = $this->analysisPingResult($file_path);
 
-                $last_line = array_pop($data);
-
-                if (strpos($last_line, 'avg')) {
-                    # for MAC OS
-                    preg_match_all('/[1-9]\d*\.\d{3}/', $last_line, $matches);
-
-                    $avg = $matches[0][1];
-
-                    $avgs[$key] = $avg;
-
-                    $servers[$key]['avg'] = $avg;
-                } elseif (strpos($last_line, '100.0% packet loss')) {
-                    $avgs[$key] = 'down';
-
-                    $servers[$key]['avg'] = 'down';
+                if ($result != false) {
+                    $i++;
+                    $servers[$key] = array_merge($servers[$key], $result);
                 } else {
                     usleep(5000);
                     continue;
@@ -252,16 +240,71 @@ class VPN
                 unset($servers_temp[$key]);
 
                 if ($show_progress) {
-                    $progress->current(count($avgs));
+                    $progress->current($i);
                 }
             }
 
-            if (count($avgs) === count($servers)) {
+            if ($i === count($servers)) {
                 break;
             }
         }
 
         return $servers;
+    }
+
+    private function analysisPingResult($file_path)
+    {
+        $data = file($file_path);
+
+        $last_line = array_pop($data);
+
+        if (strpos($last_line, '100.0% packet loss') || strpos($last_line, '100% 丢失')) {
+            $result = [
+                'min' => 'down',
+                'max' => 'down',
+                'avg' => 'down',
+            ];
+
+            return $result;
+        } else if ((strpos($last_line, 'avg')) || (strpos($last_line, '平均'))) {
+
+            $os_type = $this->getOSType();
+
+            switch ($os_type) {
+                case 'linux':
+                    // todo
+                    break;
+                case 'macOS':
+                    preg_match_all('/[1-9]\d*\.\d{3}/', $last_line, $matches);
+
+                    $result = [
+                        'min' => $matches[0][0],
+                        'max' => $matches[0][2],
+                        'avg' => $matches[0][1],
+                    ];
+
+                    break;
+                case 'windows':
+                    $matches = explode('，', $last_line);
+
+                    $result = [
+                        'min' => preg_replace('/\D/s', '', $matches[0]),
+                        'max' => preg_replace('/\D/s', '', $matches[1]),
+                        'avg' => preg_replace('/\D/s', '', $matches[2]),
+                    ];
+
+                    break;
+
+                default:
+                    $result =  false;
+                    break;
+            }
+        } else {
+            // ping still running
+            $result = false;
+        }
+
+        return $result;
     }
 
     /**
@@ -273,7 +316,7 @@ class VPN
     {
         # add th
         $table = [
-            ['name', 'type', 'host', 'avg'],
+            ['name', 'type', 'host', 'min', 'max', 'avg'],
         ];
 
         foreach ($servers as $key => $value) {
@@ -370,15 +413,29 @@ class VPN
      */
     public function getOSType()
     {
-        if ((stristr(PHP_OS, 'linux') !== false) || (stristr(PHP_OS, 'freebsd') !== false)) {
-            return 'linux';
-        } else if ((stristr(PHP_OS, 'darwin') !== false)) {
-            return 'macOS';
-        } else if (stristr(PHP_OS, 'win') !== false) {
-            return 'windows';
-        } else {
-            return 'others';
+        switch (PHP_OS) {
+            case 'Linux':
+                $os_type = 'linux';
+
+                break;
+            case 'Darwin':
+                $os_type = 'macOS';
+
+                break;
+            case 'WIN32':
+            case 'WINNT':
+            case 'Windows':
+                $os_type = 'windows';
+
+                break;
+
+            default:
+                $os_type = 'others';
+
+                break;
         }
+
+        return $os_type;
     }
 }
 
