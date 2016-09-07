@@ -1,0 +1,8 @@
+#!/usr/bin/env php
+<?php
+require_once __DIR__ .'/../vendor/autoload.php';
+
+use Springjk\Vpn\Application;
+
+$vpn = new Application('vpn-helper', '1.0');
+$vpn->run();
