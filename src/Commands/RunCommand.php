@@ -16,9 +16,15 @@ class RunCommand extends Base
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln('read VPN server list from system configuration file...');
 
-//        $servers = $vpn->getServers();
         $servers = $this->system->getServers();
+
+        if (empty($servers)) {
+            throw new \Exception('read VPN server list failed!');
+        }
+
+        $output->writeln('run ping...');
 
         $this->system->pingTest($servers);
 
@@ -27,7 +33,7 @@ class RunCommand extends Base
         $progress->start();
 
         $show_progress = function () use ($progress) {
-            $progress->advance(1);
+            $progress->advance();
         };
 
         $servers = $this->system->analysisPingResult($servers, $show_progress);
@@ -38,6 +44,22 @@ class RunCommand extends Base
 
         $this->showTable($servers, $output);
 
+        $fastest_vpn_connection_name = $servers[0]['name'];
 
+        $fastest_vpn_info = 'the minimal delay line is：' . $fastest_vpn_connection_name . ' AVG: ' . $servers[0]['avg'];
+
+        $output->writeln($fastest_vpn_info);
+
+        $output->writeln('connection ' . $fastest_vpn_connection_name . '...');
+
+        $this->system->connection($fastest_vpn_connection_name);
+
+        $connection_status = $this->system->checkConnectionStatus($fastest_vpn_connection_name);
+
+        if ($connection_status) {
+            $output->writeln('<info>connection success.</info>');
+        } else {
+            $output->writeln('<error>connection error.</error>');
+        }
     }
 }

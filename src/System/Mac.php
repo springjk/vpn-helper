@@ -61,12 +61,6 @@ class Mac implements VpnInterface
         }
     }
 
-    public function getPingFinishResult($servers, $call_back_function)
-    {
-        sleep(1);
-        $call_back_function(1);
-    }
-
     public function analysisPingResult($servers, $call_back_function)
     {
         $servers_and_result = $servers;
