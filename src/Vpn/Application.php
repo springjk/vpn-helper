@@ -1,9 +1,8 @@
 <?php
 namespace Springjk\Vpn;
 
-use Springjk\Commands\PingCommand;
-use Springjk\Commands\RunCommand;
 use Symfony\Component\Console\Application as BasicApplication;
+use Springjk\Commands\RunCommand;
 use Springjk\Commands\ServersCommand;
 
 class Application extends BasicApplication
@@ -15,7 +14,5 @@ class Application extends BasicApplication
         $this->add(new RunCommand());
 
         $this->add(new ServersCommand());
-
-        $this->add(new PingCommand());
     }
 }

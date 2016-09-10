@@ -32,7 +32,7 @@ class Mac implements VpnInterface
         $this->createLogPath();
         $this->clearLogPath();
 
-        # background run ping and return to log file
+        # background run ping and write to log file
         foreach ($servers as $key => $server) {
             exec('ping -c 5 ' . $server['host'] . ' > ' . self::LOG_PATH . '/' .  $key . '.log &');
         }
