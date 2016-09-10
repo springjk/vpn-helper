@@ -29,16 +29,19 @@ class Base extends Command
         return $array;
     }
 
-    protected function showTable($table_data, $output_interface)
+    protected function showTable($table_data, $output)
     {
-        $table = new Table($output_interface);
+        $table = new Table($output);
 
         $table_title = array_keys($table_data[0]);
 
+        foreach ($table_title as $key => $value) {
+            $table_title[$key] = ucwords($value);
+        }
+
         $table
             ->setHeaders($table_title)
-            ->setRows($table_data)
-        ;
+            ->setRows($table_data);
 
         $table->render();
     }

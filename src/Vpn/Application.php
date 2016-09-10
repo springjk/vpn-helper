@@ -7,12 +7,15 @@ use Springjk\Commands\ServersCommand;
 
 class Application extends BasicApplication
 {
-    public function __construct($name, $version)
+    public function __construct()
     {
-        parent::__construct($name, $version);
+        parent::__construct();
 
         $this->add(new RunCommand());
 
         $this->add(new ServersCommand());
+
+        $this->setName('vpn helper');
+        $this->setVersion('1.0.0');
     }
 }
