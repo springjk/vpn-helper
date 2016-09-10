@@ -18,5 +18,7 @@ class ServersCommand extends Base
         $servers = $this->system->getServers();
 
         $this->showTable($servers, $output);
+
+        return $servers;
     }
 }

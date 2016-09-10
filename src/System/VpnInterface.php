@@ -3,38 +3,43 @@ namespace Springjk\System;
 
 interface VpnInterface
 {
-
     /**
-     * get VPN server list from local pc config file
+     * Get VPN server list from system configuration file
      *
      * @return array VPN Server list
      */
     function getServers();
 
     /**
-     * ping VPN server list and insert ping avg to servers
+     * Ping VPN server list and insert ping avg to servers
      *
-     * @param  array   $servers       VPN server list
+     * @param  array $servers VPN server list
      *
-     * @return array                  ping result
+     * @return array Ping test result
      */
     function pingTest($servers);
 
-    function analysisPingResult($servers, $call_back_function);
+    /**
+     * Analysis VPN server list form result log
+     *
+     * @param array    $servers  VPN server list
+     * @param callable $callable A PHP callback
+     *
+     * @return array VPN server list ping result
+     */
+    function analysisPingResult($servers, callable $callable);
 
     /**
-     * connection VPN
+     * Connection A VPN
      *
-     * @param  array $vpn_connection_name a VPN server connection name
+     * @param  array $vpn_connection_name A VPN server connection name
      */
     function connection($vpn_connection_name);
 
     /**
-     * check vpn connection status
+     * Check vpn connection status
      *
-     * @param  string $vpn_connection_name vpn_connection_name
-     *
-     * @return bool                        connection status
+     * @return bool   Connection status
      */
-    function checkConnectionStatus($vpn_connection_name);
+    function checkConnectionStatus();
 }

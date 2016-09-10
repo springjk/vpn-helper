@@ -7,35 +7,32 @@ class System
 {
     static public function create()
     {
-//        $os_type = $this->getOSType();
-//
-//        switch ($os_type) {
+        $os_type = self::getOSType();
+
+        switch ($os_type) {
 //            case 'linux':
 //                $system = new Linux();
 //                break;
-//            case 'macOS':
-//                $system = new Mac();
-//                break;
+            case 'macOS':
+                $system = new Mac();
+                break;
 //            case 'windows':
 //                $system = new Windows();
 //                break;
-//            default:
-//                throw new \Exception('not support os type');
-//                break;
-//        }
-
-        $system = new Mac();
+            default:
+                throw new \Exception('not support os type.');
+                break;
+        }
 
         return $system;
     }
-
 
     /**
      * get php server OS type
      *
      * @return string OS type
      */
-    public function getOSType()
+    static public function getOSType()
     {
         switch (PHP_OS) {
             case 'Linux':

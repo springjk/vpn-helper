@@ -32,9 +32,9 @@ class Mac implements VpnInterface
         $this->createLogPath();
         $this->clearLogPath();
 
-        # background run ping and return to log file
+        # background run ping and write to log file
         foreach ($servers as $key => $server) {
-            exec('ping -c 5 ' . $server['host'] . ' > ' . self::LOG_PATH . '/' .  $key . '.log &');
+            exec('ping -c 5 ' . $server['host'] . ' > ' . self::LOG_PATH . '/' . $key . '.log &');
         }
     }
 
@@ -48,6 +48,7 @@ class Mac implements VpnInterface
             }
         }
     }
+
     public function clearLogPath()
     {
         # clear history log
@@ -61,18 +62,14 @@ class Mac implements VpnInterface
         }
     }
 
-    public function getPingFinishResult($servers, $call_back_function)
-    {
-        sleep(1);
-        $call_back_function(1);
-    }
-
-    public function analysisPingResult($servers, $call_back_function)
+    public function analysisPingResult($servers, callable $callable)
     {
         $servers_and_result = $servers;
+        $finish_count = 0;
 
         do {
-            foreach ($servers as $key => $value) {
+            foreach ($servers as $key => $server) {
+
                 $file_path = self::LOG_PATH . '/' . $key . '.log';
 
                 $data = file($file_path);
@@ -80,23 +77,38 @@ class Mac implements VpnInterface
                 $last_line = array_pop($data);
 
                 if (strpos($last_line, '100.0% packet loss') !== false) {
+                    # ping lost
                     $servers_and_result[$key]['min'] = 'down';
                     $servers_and_result[$key]['max'] = 'down';
                     $servers_and_result[$key]['avg'] = 'down';
                 } else if (strpos($last_line, 'avg')) {
+                    # ping success
                     preg_match_all('/[1-9]\d*\.\d{3}/', $last_line, $matches);
 
                     $servers_and_result[$key]['min'] = $matches[0][0];
                     $servers_and_result[$key]['max'] = $matches[0][2];
                     $servers_and_result[$key]['avg'] = $matches[0][1];
                 } else {
-                    // ping still running
+                    # ping still running
                     continue;
                 }
 
-                unset($servers[$key]);
+                $finish_count++;
 
-                $call_back_function();
+                if (count($servers) == 1) {
+                    $message = 'all finish';
+                } else {
+                    # get next key of server
+                    $server_keys = array_keys($servers);
+                    $this_server_key = array_search($key, $server_keys);
+                    $next_server_key = (++$this_server_key == count($server_keys)) ? $server_keys[0] : $server_keys[$this_server_key];
+
+                    $message = 'waiting result of ' . $servers[$next_server_key]['name'];
+                }
+
+                $callable($message);
+
+                unset($servers[$key]);
             }
         } while (!empty($servers));
 
@@ -122,7 +134,7 @@ class Mac implements VpnInterface
         exec($script_code);
     }
 
-    public function checkConnectionStatus($vpn_connection_name)
+    public function checkConnectionStatus()
     {
         exec('ifconfig |grep ppp0', $result);
 
