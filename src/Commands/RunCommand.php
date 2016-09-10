@@ -13,7 +13,7 @@ class RunCommand extends Base
     {
         $this
             ->setName('run')
-            ->setDescription('Ping test all vpn server and connection the fastest one');
+            ->setDescription('Ping test vpn server list and connection the fastest one');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

@@ -10,6 +10,8 @@
         }
     ],
     "main": "bin/main",
-    "output": "test.phar",
+    "output": "vpn.phar",
+    "git-version": "git-version",
+    "git-commit-short": "git-commit-short",
     "stub": true
 }
