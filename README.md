@@ -1,6 +1,6 @@
 # VPN Helper
 
-Test VPN servers and connection the fastest one.
+Test VPN servers and connection the fastest one. [中文](https://github.com/springjk/vpn-helper/blob/master/README-zh.md)
 
 ## Background
 
