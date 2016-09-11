@@ -1,11 +1,15 @@
 # VPN Helper
 测试 VPN 线路列表并连接延迟最低的线路。
+
 ## 背景
 很多 VPN 服务商提供了多个服务器供我们使用，但是他们大多数都没有提供测试工具。我们可以使用`ping`进行测速得到延迟最低的一个服务器，但遗憾的是很多情况下复杂的网络环境使服务器线路的延迟经常变化，这时使用`VPN Helper`可以快速的连接延迟最低的一个。
 
+## 依赖
+* PHP >= 5.6
+
 ## 安装
 ``` bash
-$ curl -sS https://raw.githubusercontent.com/springjk/vpn-speed-test/master/installer | php
+$ curl -sS https://raw.githubusercontent.com/springjk/vpn-helper/master/installer | php
 ```
 ## 使用
 ### 自动连接
