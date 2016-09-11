@@ -1,36 +1,36 @@
 # VPN Helper
 
-Test VPN servers and connection the fastest one.
+测试 VPN 线路列表并连接延迟最低的线路。
 
-## Background
+## 背景
 
-A lot of VPN providers provide us multiple servers, but they don't provide a speed test tool to get the fastest of servers. Even if we can use `ping` to test, regrettably the complex network environment in many cases make the server constantly changing line delay, Then use `VPN Helper` can quickly connect the fastest one.
+很多 VPN 服务商提供了多个服务器供我们使用，但是他们大多数都没有提供测试最佳线路工具。我们可以使用 `ping`进行测速得到延迟最低的一个服务器，但遗憾的是很多情况下复杂的网络环境使服务器线路的延迟经常变化，这时使用 `VPN Helper` 可以快速的连接延迟最低的一个。
 
-## Requirement
+## 依赖
 
 * PHP >= 5.6
 
-## Installation
+## 安装
 
 ``` bash
 $ curl -sS https://raw.githubusercontent.com/springjk/vpn-helper/master/installer | php
 ```
 
-## Usage
+## 使用
 
-**Test and connection**
+**测速并连接**
 
 ``` shell
 $ vpn run
 ```
 
-**Display VPN servers**
+**查看 VPN 列表**
 
 ``` shell
 $ vpn servers
 ```
 
-**Lists commands**
+**功能菜单**
 
 ``` shell
 $ vpn
@@ -55,7 +55,7 @@ Available commands:
   run      Ping test all vpn server and connection the fastest one
   servers  Displays local vpn server list
 ```
-## License
+## 协议
 
 MIT
 
