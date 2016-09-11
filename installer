@@ -1,0 +1,110 @@
+#!/usr/bin/env php
+<?php
+$project_name = 'springjk/vpn-speed-test';
+
+$install_name = 'vpn';
+
+echo 'Phar Command Installer' . PHP_EOL;
+echo '======================' . PHP_EOL;
+
+console_output(sprintf('get %s latest releases info...', $install_name));
+
+# last releases download url
+$api_url = sprintf('https://api.github.com/repos/%s/releases/latest', $project_name);
+
+$version = json_decode(get($api_url), true);
+
+# get binaries file
+$file_url = $version['assets'][0]['browser_download_url'];
+
+if (!$file_url) {
+    exit('Error! can\'t find file download url!' . PHP_EOL);
+}
+
+# download file download url
+console_output(sprintf('download file form %s...', $file_url));
+file_put_contents(__DIR__ . '/' . $install_name, get($file_url));
+
+# install for global
+console_output('install for global...');
+global_install($install_name);
+
+/**
+ * output string witch new line
+ *
+ * @param $string
+ * @param $style
+ */
+function console_output($string, $style = 'normal')
+{
+    switch ($style) {
+        case 'success':
+            $string = chr(27) . '[1;32m' . $string . chr(27) . '[0m';
+            break;
+
+        case 'warning':
+            $string = chr(27) . '[1;33m' . $string . chr(27) . '[0m';
+            break;
+
+        default:
+            // do nothing
+            break;
+    }
+
+    echo PHP_EOL . $string . PHP_EOL;
+}
+
+/**
+ * @param $url
+ *
+ * @return mixed
+ */
+function get($url)
+{
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
+    curl_setopt($ch, CURLOPT_USERAGENT, 'AlphaGo');
+
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    return $response;
+}
+
+/**
+ * @param $root
+ */
+function global_install($install_name, $root = false)
+{
+    $command = sprintf('mv -f %s/%s /usr/local/bin/%s && chmod a+x /usr/local/bin/%s',
+        __DIR__,
+        $install_name,
+        $install_name,
+        $install_name
+    );
+
+    if ($root) {
+        $command = 'sudo ' . $command;
+    }
+
+    system($command, $command_return);
+
+    if ($command_return === 0) {
+        $text = sprintf(
+            'Successful installation, command has been install in /usr/local/bin/%s, try enter %s in command line.',
+            $install_name,
+            $install_name
+        );
+        console_output($text, 'success');
+    } else {
+        $text = 'Current account can\'t authorized to install, will switch to ROOT account, you may need to enter a password.';
+        console_output($text, 'warning');
+
+        global_install(true);
+    }
+}
