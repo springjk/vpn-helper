@@ -12,7 +12,6 @@
 $ curl -sS https://raw.githubusercontent.com/springjk/vpn-helper/master/installer | php
 ```
 ## 使用
-### 自动连接
 **测速并连接**
 
 ``` shell
