@@ -138,7 +138,7 @@ class Mac implements VpnInterface
     {
         exec('ifconfig |grep ppp0', $result);
 
-        if ($result !== '') {
+        if (!empty($result)) {
             return true;
         } else {
             return false;

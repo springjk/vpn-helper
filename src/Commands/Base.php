@@ -29,7 +29,7 @@ class Base extends Command
         return $array;
     }
 
-    protected function showTable($table_data, $output)
+    public function showTable($table_data, $output)
     {
         $table = new Table($output);
 

@@ -22,9 +22,9 @@ class RunCommand extends Base
 
         $servers = $this->getServers($io);
 
-        $io->section('execute ping command test servers speed');
+        $io->section('Execute ping command test servers speed');
 
-        $io->write('run ping...');
+        $io->write('start ping...');
 
         $this->system->pingTest($servers);
 
@@ -44,37 +44,37 @@ class RunCommand extends Base
 
         $fastest_vpn_connection_name = $servers[0]['name'];
 
-        $fastest_vpn_info = 'the minimal delay line is：' . $fastest_vpn_connection_name . ' AVG: ' . $servers[0]['avg'];
+        $fastest_vpn_info = 'The minimal delay line is：' . $fastest_vpn_connection_name . ' AVG: ' . $servers[0]['avg'];
 
         $io->block($fastest_vpn_info);
 
-        $io->section('connection the fastest one server');
+        $io->section('Connection the fastest one server');
 
-        $io->block('connection ' . $fastest_vpn_connection_name . '...');
+        $io->block('Connection ' . $fastest_vpn_connection_name . '...');
 
         $this->system->connection($fastest_vpn_connection_name);
 
         $connection_status = $this->system->checkConnectionStatus($fastest_vpn_connection_name);
 
         if ($connection_status) {
-            $io->success('connection success.');
+            $io->success('Connection success.');
         } else {
-            $io->error('connection error.');
+            $io->error('Connection error.');
         }
     }
 
     public function getServers(SymfonyStyle $io)
     {
-        $io->section('read VPN server list');
+        $io->section('Read VPN server list');
 
         $servers_command = $this->getApplication()->get('servers');
 
         $servers = $servers_command->execute(new ArgvInput(), new NullOutput());
 
         if (empty($servers)) {
-            throw new \ErrorException('read VPN server list failed!');
+            throw new \ErrorException('Read VPN server list failed!');
         } else {
-            $io->block(sprintf('get %d servers from system configuration file', count($servers)));
+            $io->block(sprintf('Get %d servers from system configuration file', count($servers)));
         }
 
         return $servers;
