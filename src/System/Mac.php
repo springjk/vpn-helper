@@ -103,7 +103,7 @@ class Mac implements VpnInterface
                     $this_server_key = array_search($key, $server_keys);
                     $next_server_key = (++$this_server_key == count($server_keys)) ? $server_keys[0] : $server_keys[$this_server_key];
 
-                    $message = 'waiting result of ' . $servers[$next_server_key]['name'];
+                    $message = 'waiting result for ' . $servers[$next_server_key]['name'];
                 }
 
                 $callable($message);
@@ -131,14 +131,20 @@ class Mac implements VpnInterface
             $script_code .= ' -e \'' . $value . '\'';
         }
 
-        exec($script_code);
+        exec($script_code, $result, $result_code);
+
+        if (!empty($result) && $result_code === 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function checkConnectionStatus()
     {
-        exec('ifconfig |grep ppp0', $result);
+        exec('ifconfig |grep ppp0', $result, $result_code);
 
-        if ($result !== '') {
+        if (!empty($result) && $result_code === 0) {
             return true;
         } else {
             return false;

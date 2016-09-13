@@ -10,7 +10,7 @@ class ServersCommand extends Base
     {
         $this
             ->setName('servers')
-            ->setDescription('Displays local vpn server list');
+            ->setDescription('Displays all vpn servers');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

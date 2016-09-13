@@ -7,7 +7,7 @@ $install_name = 'vpn';
 echo 'Phar Command Installer' . PHP_EOL;
 echo '======================' . PHP_EOL;
 
-console_output(sprintf('get %s latest releases info...', $install_name));
+console_output(sprintf('Get %s latest releases info...', $install_name));
 
 # last releases download url
 $api_url = sprintf('https://api.github.com/repos/%s/releases/latest', $project_name);
@@ -22,11 +22,11 @@ if (!$file_url) {
 }
 
 # download file download url
-console_output(sprintf('download file form %s...', $file_url));
+console_output(sprintf('Download file form %s...', $file_url));
 file_put_contents(__DIR__ . '/' . $install_name, get($file_url));
 
 # install for global
-console_output('install for global...');
+console_output('Install for global...');
 global_install($install_name);
 
 /**
@@ -96,7 +96,7 @@ function global_install($install_name, $root = false)
 
     if ($command_return === 0) {
         $text = sprintf(
-            'Successful installation, command has been install in /usr/local/bin/%s, try enter %s in command line.',
+            'Successful installation, command has been install in /usr/local/bin/%s, try enter %s in terminal.',
             $install_name,
             $install_name
         );

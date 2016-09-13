@@ -5,7 +5,7 @@ use Springjk\System\Mac;
 
 class System
 {
-    static public function create()
+    public static function create()
     {
         $os_type = self::getOSType();
 
@@ -32,7 +32,7 @@ class System
      *
      * @return string OS type
      */
-    static public function getOSType()
+    public static function getOSType()
     {
         switch (PHP_OS) {
             case 'Linux':
