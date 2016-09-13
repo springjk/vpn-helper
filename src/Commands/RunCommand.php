@@ -21,32 +21,16 @@ class RunCommand extends Base
 
         $io = new SymfonyStyle($input, $output);
 
-        $fastest_vpn_connection_name = $this->getFastestVpn();
+        $fastest_vpn_connection_name = $this->executeCommand('ping', new ArrayInput([]), new ConsoleOutput());
 
         $io->section('Connection the fastest one server');
 
-        $this->connection($fastest_vpn_connection_name);
-    }
-
-    public function getFastestVpn()
-    {
-        $ping_command = $this->getApplication()->get('ping');
-
-        $fastest_vpn_connection_name = $ping_command->execute(new ArrayInput([]), new ConsoleOutput());
-
-        return $fastest_vpn_connection_name;
-    }
-
-    public function connection($connection_name)
-    {
-        $connection_command = $this->getApplication()->get('connection');
-
         $input = new ArrayInput([
-            'connection_name' => $connection_name
+            'connection_name' => $fastest_vpn_connection_name
         ]);
 
         $output = new ConsoleOutput();
 
-        $connection_command->run($input, $output);
+        $this->runCommand('connection', $input, $output);
     }
 }

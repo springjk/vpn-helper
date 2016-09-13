@@ -2,8 +2,10 @@
 namespace Springjk\Commands;
 
 use Springjk\Vpn\System;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Base extends Command
 {
@@ -44,5 +46,23 @@ class Base extends Command
             ->setRows($table_data);
 
         $table->render();
+    }
+
+    public function runCommand($command_name, InputInterface $input, OutputInterface $output)
+    {
+        $command = $this->getApplication()->get($command_name);
+
+        $result_code = $command->run($input, $output);
+
+        return $result_code;
+    }
+
+    public function executeCommand($command_name, InputInterface $input, OutputInterface $output)
+    {
+        $command = $this->getApplication()->get($command_name);
+
+        $result = $command->execute($input, $output);
+
+        return $result;
     }
 }

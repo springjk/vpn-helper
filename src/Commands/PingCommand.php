@@ -56,9 +56,7 @@ class PingCommand extends Base
     {
         $io->section('Read VPN server list');
 
-        $servers_command = $this->getApplication()->get('servers');
-
-        $servers = $servers_command->execute(new ArrayInput([]), new NullOutput());
+        $servers = $this->executeCommand('servers', new ArrayInput([]), new NullOutput());
 
         if (empty($servers)) {
             throw new \ErrorException('Read VPN server list failed!');
