@@ -131,14 +131,20 @@ class Mac implements VpnInterface
             $script_code .= ' -e \'' . $value . '\'';
         }
 
-        exec($script_code);
+        exec($script_code, $result, $result_code);
+
+        if (!empty($result) && $result_code === 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function checkConnectionStatus()
     {
-        exec('ifconfig |grep ppp0', $result);
+        exec('ifconfig |grep ppp0', $result, $result_code);
 
-        if (!empty($result)) {
+        if (!empty($result) && $result_code === 0) {
             return true;
         } else {
             return false;

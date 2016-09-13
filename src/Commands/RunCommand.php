@@ -1,9 +1,10 @@
 <?php
 namespace Springjk\Commands;
 
-use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,6 +19,7 @@ class RunCommand extends Base
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+
         $io = new SymfonyStyle($input, $output);
 
         $servers = $this->getServers($io);
@@ -50,17 +52,7 @@ class RunCommand extends Base
 
         $io->section('Connection the fastest one server');
 
-        $io->block('Connection ' . $fastest_vpn_connection_name . '...');
-
-        $this->system->connection($fastest_vpn_connection_name);
-
-        $connection_status = $this->system->checkConnectionStatus($fastest_vpn_connection_name);
-
-        if ($connection_status) {
-            $io->success('Connection success.');
-        } else {
-            $io->error('Connection error.');
-        }
+        $this->connection($fastest_vpn_connection_name);
     }
 
     public function getServers(SymfonyStyle $io)
@@ -69,7 +61,7 @@ class RunCommand extends Base
 
         $servers_command = $this->getApplication()->get('servers');
 
-        $servers = $servers_command->execute(new ArgvInput(), new NullOutput());
+        $servers = $servers_command->execute(new ArrayInput([]), new NullOutput());
 
         if (empty($servers)) {
             throw new \ErrorException('Read VPN server list failed!');
@@ -78,5 +70,18 @@ class RunCommand extends Base
         }
 
         return $servers;
+    }
+
+    public function connection($connection_name)
+    {
+        $servers_command = $this->getApplication()->get('connection');
+
+        $input = new ArrayInput([
+            'connection_name' => $connection_name
+        ]);
+
+        $output = new ConsoleOutput();
+
+        $servers_command->run($input, $output);
     }
 }

@@ -1,9 +1,10 @@
 <?php
 namespace Springjk\Vpn;
 
-use Symfony\Component\Console\Application as BasicApplication;
 use Springjk\Commands\RunCommand;
 use Springjk\Commands\ServersCommand;
+use Springjk\Commands\ConnectionCommand;
+use Symfony\Component\Console\Application as BasicApplication;
 
 class Application extends BasicApplication
 {
@@ -14,6 +15,8 @@ class Application extends BasicApplication
         $this->add(new RunCommand());
 
         $this->add(new ServersCommand());
+
+        $this->add(new ConnectionCommand());
     }
 
     /**

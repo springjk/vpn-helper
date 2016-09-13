@@ -33,13 +33,15 @@ interface VpnInterface
      * Connection A VPN
      *
      * @param  array $vpn_connection_name A VPN server connection name
+     *
+     * @return bool  Connection status
      */
     function connection($vpn_connection_name);
 
     /**
      * Check vpn connection status
      *
-     * @return bool   Connection status
+     * @return bool Connection status
      */
     function checkConnectionStatus();
 }
