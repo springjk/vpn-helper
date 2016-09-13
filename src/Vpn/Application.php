@@ -1,6 +1,7 @@
 <?php
 namespace Springjk\Vpn;
 
+use Springjk\Commands\PingCommand;
 use Springjk\Commands\RunCommand;
 use Springjk\Commands\ServersCommand;
 use Springjk\Commands\ConnectionCommand;
@@ -15,6 +16,8 @@ class Application extends BasicApplication
         $this->add(new RunCommand());
 
         $this->add(new ServersCommand());
+
+        $this->add(new PingCommand());
 
         $this->add(new ConnectionCommand());
     }

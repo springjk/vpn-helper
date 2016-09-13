@@ -103,7 +103,7 @@ class Mac implements VpnInterface
                     $this_server_key = array_search($key, $server_keys);
                     $next_server_key = (++$this_server_key == count($server_keys)) ? $server_keys[0] : $server_keys[$this_server_key];
 
-                    $message = 'waiting result of ' . $servers[$next_server_key]['name'];
+                    $message = 'waiting result for ' . $servers[$next_server_key]['name'];
                 }
 
                 $callable($message);

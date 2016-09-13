@@ -2,7 +2,6 @@
 namespace Springjk\Commands;
 
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,7 +13,7 @@ class RunCommand extends Base
     {
         $this
             ->setName('run')
-            ->setDescription('Ping test vpn server list and connection the fastest one');
+            ->setDescription('Ping test all vpn servers and connection the fastest one');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -22,59 +21,25 @@ class RunCommand extends Base
 
         $io = new SymfonyStyle($input, $output);
 
-        $servers = $this->getServers($io);
-
-        $io->section('Execute ping command test servers speed');
-
-        $io->write('start ping...');
-
-        $this->system->pingTest($servers);
-
-        $io->progressStart(count($servers));
-
-        $servers = $this->system->analysisPingResult($servers, function ($message) use ($io) {
-            $io->progressAdvance();
-
-            $io->write(' ' . $message);
-        });
-
-        $io->progressFinish();
-
-        $servers = $this->sortArray($servers, 'avg');
-
-        $this->showTable($servers, $output);
-
-        $fastest_vpn_connection_name = $servers[0]['name'];
-
-        $fastest_vpn_info = 'The minimal delay line is：' . $fastest_vpn_connection_name . ' AVG: ' . $servers[0]['avg'];
-
-        $io->block($fastest_vpn_info);
+        $fastest_vpn_connection_name = $this->getFastestVpn();
 
         $io->section('Connection the fastest one server');
 
         $this->connection($fastest_vpn_connection_name);
     }
 
-    public function getServers(SymfonyStyle $io)
+    public function getFastestVpn()
     {
-        $io->section('Read VPN server list');
+        $ping_command = $this->getApplication()->get('ping');
 
-        $servers_command = $this->getApplication()->get('servers');
+        $fastest_vpn_connection_name = $ping_command->execute(new ArrayInput([]), new ConsoleOutput());
 
-        $servers = $servers_command->execute(new ArrayInput([]), new NullOutput());
-
-        if (empty($servers)) {
-            throw new \ErrorException('Read VPN server list failed!');
-        } else {
-            $io->block(sprintf('Get %d servers from system configuration file', count($servers)));
-        }
-
-        return $servers;
+        return $fastest_vpn_connection_name;
     }
 
     public function connection($connection_name)
     {
-        $servers_command = $this->getApplication()->get('connection');
+        $connection_command = $this->getApplication()->get('connection');
 
         $input = new ArrayInput([
             'connection_name' => $connection_name
@@ -82,6 +47,6 @@ class RunCommand extends Base
 
         $output = new ConsoleOutput();
 
-        $servers_command->run($input, $output);
+        $connection_command->run($input, $output);
     }
 }
