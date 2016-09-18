@@ -18,5 +18,8 @@
         "psr-4": {
             "Springjk\\": "src/"
         }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^3.1"
     }
 }
