@@ -117,23 +117,11 @@ class Mac implements VpnInterface
 
     public function connection($vpn_connection_name)
     {
-        $script_code_template = [
-            'tell application "System Events"',
-            'tell current location of network preferences',
-            'set VPNservice to service "' . $vpn_connection_name . '" -- name of the VPN service',
-            'if exists VPNservice then connect VPNservice',
-            'end tell',
-            'end tell',
-        ];
-        $script_code = 'osascript';
+        $shell =  sprintf('scutil --nc start "%s"', $vpn_connection_name);
 
-        foreach ($script_code_template as $value) {
-            $script_code .= ' -e \'' . $value . '\'';
-        }
+        exec($shell, $result, $result_code);
 
-        exec($script_code, $result, $result_code);
-
-        if (!empty($result) && $result_code === 0) {
+        if ($result_code === 0) {
             return true;
         } else {
             return false;
@@ -142,6 +130,7 @@ class Mac implements VpnInterface
 
     public function checkConnectionStatus()
     {
+        // scutil --nc status "connection name" | grep "ServerAddress"
         exec('ifconfig |grep ppp0', $result, $result_code);
 
         if (!empty($result) && $result_code === 0) {
