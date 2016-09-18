@@ -11,6 +11,7 @@ class Mac implements VpnInterface
     {
         $servers = [];
 
+        // /Library/Preferences/com.apple.networkextension.plist IKEv2 support
         $plist = new CFPropertyList('/Library/Preferences/SystemConfiguration/preferences.plist');
         $plist = $plist->toArray();
 
