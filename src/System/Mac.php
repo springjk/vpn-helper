@@ -11,6 +11,7 @@ class Mac implements VpnInterface
     {
         $servers = [];
 
+        // /Library/Preferences/com.apple.networkextension.plist IKEv2 support
         $plist = new CFPropertyList('/Library/Preferences/SystemConfiguration/preferences.plist');
         $plist = $plist->toArray();
 
@@ -34,7 +35,7 @@ class Mac implements VpnInterface
 
         # background run ping and write to log file
         foreach ($servers as $key => $server) {
-            exec('ping -c 5 ' . $server['host'] . ' > ' . self::LOG_PATH . '/' . $key . '.log &');
+            exec(sprintf('ping -c 5 %s > "%s/%d.log" &', $server['host'], self::LOG_PATH, $key));
         }
     }
 
