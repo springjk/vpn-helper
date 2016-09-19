@@ -62,7 +62,11 @@ class Windows implements VpnInterface
 
         # background run ping and write to log file
         foreach ($servers as $key => $server) {
-            exec('start /b ping -n 5 ' . $server['host'] . ' > ' . $this->log_path . '/' . $key . '.log');
+            $file_path = $this->log_path . '\\' . $key . '.log';
+
+            exec(sprintf('start /B ping -n 5 %s > "%s"', $server['host'], $file_path));
+
+            system(sprintf('type "%s"', $file_path));
         }
     }
 
@@ -137,9 +141,9 @@ class Windows implements VpnInterface
 
     public function connection($vpn_connection_name)
     {
-        $shell =  sprintf('scutil --nc start "%s"', $vpn_connection_name);
+        $shell =  sprintf('rasdial "%s" * *', $vpn_connection_name);
 
-        exec($shell, $result, $result_code);
+        passthru($shell, $result_code);
 
         if ($result_code === 0) {
             return true;

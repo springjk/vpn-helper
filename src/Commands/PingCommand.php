@@ -27,7 +27,7 @@ class PingCommand extends Base
 
         $io->write('start ping...');
 
-        // $this->system->pingTest($servers);
+        $this->system->pingTest($servers);
 
         $io->progressStart(count($servers));
 

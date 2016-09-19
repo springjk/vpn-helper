@@ -35,7 +35,7 @@ class Mac implements VpnInterface
 
         # background run ping and write to log file
         foreach ($servers as $key => $server) {
-            exec('ping -c 5 ' . $server['host'] . ' > ' . self::LOG_PATH . '/' . $key . '.log &');
+            exec(sprintf('ping -c 5 %s > "%s/%d.log" &', $server['host'], self::LOG_PATH, $key));
         }
     }
 
