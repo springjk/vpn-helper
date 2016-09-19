@@ -105,6 +105,6 @@ function global_install($install_name, $root = false)
         $text = 'Current account can\'t authorized to install, will switch to ROOT account, you may need to enter a password.';
         console_output($text, 'warning');
 
-        global_install(true);
+        global_install($install_name, true);
     }
 }
