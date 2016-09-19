@@ -2,6 +2,7 @@
 namespace Springjk\Vpn;
 
 use Springjk\System\Mac;
+use Springjk\System\Windows;
 
 class System
 {
@@ -16,9 +17,9 @@ class System
             case 'macOS':
                 $system = new Mac();
                 break;
-//            case 'windows':
-//                $system = new Windows();
-//                break;
+           case 'windows':
+               $system = new Windows();
+               break;
             default:
                 throw new \Exception('not support os type.');
                 break;

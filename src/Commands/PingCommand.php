@@ -27,7 +27,7 @@ class PingCommand extends Base
 
         $io->write('start ping...');
 
-        $this->system->pingTest($servers);
+        // $this->system->pingTest($servers);
 
         $io->progressStart(count($servers));
 
@@ -45,7 +45,7 @@ class PingCommand extends Base
 
         $fastest_vpn_connection_name = $servers[0]['name'];
 
-        $fastest_vpn_info = 'The minimal delay line is：' . $fastest_vpn_connection_name . ' AVG: ' . $servers[0]['avg'];
+        $fastest_vpn_info = 'The minimal delay line is: ' . $fastest_vpn_connection_name . ' AVG: ' . $servers[0]['avg'];
 
         $io->block($fastest_vpn_info);
 
