@@ -6,7 +6,6 @@ class Windows implements VpnInterface
 
     public $log_path;
 
-
     public function __construct()
     {
         $this->log_path = sys_get_temp_dir() . '\vpn-helper\logs';

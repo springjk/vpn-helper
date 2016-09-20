@@ -17,6 +17,9 @@ class ServersCommand extends Base
     {
         $servers = $this->system->getServers();
 
+        if (empty($servers)) {
+            throw new \Exception('vpn server not found');
+        }
         $this->showTable($servers, $output);
 
         return $servers;

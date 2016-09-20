@@ -13,14 +13,15 @@ class Mac implements VpnInterface
         // /Library/Preferences/com.apple.networkextension.plist IKEv2 support
         $plist = new CFPropertyList('/Library/Preferences/SystemConfiguration/preferences.plist');
         $plist = $plist->toArray();
-
-        foreach ($plist['NetworkServices'] as $key => $value) {
-            if (array_key_exists('PPP', $value)) {
-                $servers[] = [
-                    'name' => $value['UserDefinedName'],
-                    'type' => $value['Interface']['SubType'],
-                    'host' => $value['PPP']['CommRemoteAddress'],
-                ];
+        if (!empty($plist)) {
+            foreach ($plist['NetworkServices'] as $key => $value) {
+                if (array_key_exists('PPP', $value)) {
+                    $servers[] = [
+                        'name' => $value['UserDefinedName'],
+                        'type' => $value['Interface']['SubType'],
+                        'host' => $value['PPP']['CommRemoteAddress'],
+                    ];
+                }
             }
         }
 
