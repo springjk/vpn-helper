@@ -3,7 +3,7 @@
 $project_name = 'springjk/vpn-speed-test';
 
 $install_name = 'vpn';
-
+global_install_for_windows($install_name);die;
 echo 'Phar Command Installer' . PHP_EOL;
 echo '======================' . PHP_EOL;
 
@@ -155,8 +155,13 @@ function global_install($install_name, $root = false)
 
 function global_install_for_windows($install_name)
 {
-    mkdir('C:\\Program Files\\phar');
+    exec('mkdir %ProgramData%\\phar');
 
-    rename($install_name, 'C:\\Program Files\phar\\' . $install_name . '.phar');
+    exec('mv ' . $install_name . ' "%ProgramData%\phar\\' . $install_name . '.phar"');
 
+    exec('setx PATH "%PATH%; %ProgramData%\phar');
+    
+    $str = 'php "%~dp0vpn.phar" %*';
+
+    exec('echo ' . $str . ' > "%ProgramData%\\phar\\' . $install_name . '.bat"');
 }
