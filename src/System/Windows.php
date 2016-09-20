@@ -23,7 +23,7 @@ class Windows implements VpnInterface
         foreach ($output as $key => $value) {
             $explode_array = explode(':', $value);
 
-            if (count($explode_array === 2)) {
+            if (count($explode_array) === 2) {
 
                 switch (trim($explode_array[0])) {
                     case 'Name':
@@ -127,7 +127,7 @@ class Windows implements VpnInterface
                     continue;
                 }
 
-                
+
                 $finish_count++;
 
                 $callable('running');
@@ -141,7 +141,7 @@ class Windows implements VpnInterface
 
     public function connection($vpn_connection_name)
     {
-        $shell =  sprintf('rasdial "%s" * *', $vpn_connection_name);
+        $shell = sprintf('rasdial "%s" * *', $vpn_connection_name);
 
         passthru($shell, $result_code);
 

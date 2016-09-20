@@ -1,8 +1,8 @@
 <?php
 namespace Springjk\Vpn;
 
-use Springjk\Commands\PingCommand;
 use Springjk\Commands\RunCommand;
+use Springjk\Commands\PingCommand;
 use Springjk\Commands\ServersCommand;
 use Springjk\Commands\ConnectionCommand;
 use Symfony\Component\Console\Application as BasicApplication;
