@@ -27,7 +27,50 @@ file_put_contents(__DIR__ . '/' . $install_name, get($file_url));
 
 # install for global
 console_output('Install for global...');
-global_install($install_name);
+
+$os_type = get_os_type();
+
+switch ($os_type) {
+    case 'linux':
+        global_install($install_name);
+        break;
+    case 'macOS':
+        global_install($install_name);
+        break;
+    case 'windows':
+        global_install_for_windows($install_name);
+        break;
+    default:
+        throw new \Exception('not support os type.');
+        break;
+}
+
+/**
+ * get php server OS type
+ *
+ * @return string OS type
+ */
+function get_os_type()
+{
+    switch (PHP_OS) {
+        case 'Linux':
+            $os_type = 'linux';
+            break;
+        case 'Darwin':
+            $os_type = 'macOS';
+            break;
+        case 'WIN32':
+        case 'WINNT':
+        case 'Windows':
+            $os_type = 'windows';
+            break;
+        default:
+            $os_type = 'others';
+            break;
+    }
+
+    return $os_type;
+}
 
 /**
  * output string witch new line
@@ -77,6 +120,7 @@ function get($url)
 }
 
 /**
+ * @param $install_name
  * @param $root
  */
 function global_install($install_name, $root = false)
@@ -107,4 +151,12 @@ function global_install($install_name, $root = false)
 
         global_install($install_name, true);
     }
+}
+
+function global_install_for_windows($install_name)
+{
+    mkdir('C:\\Program Files\\phar');
+
+    rename($install_name, 'C:\\Program Files\phar\\' . $install_name . '.phar');
+
 }
