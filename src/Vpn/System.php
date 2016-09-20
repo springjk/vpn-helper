@@ -17,9 +17,9 @@ class System
             case 'macOS':
                 $system = new Mac();
                 break;
-           case 'windows':
-               $system = new Windows();
-               break;
+            case 'windows':
+                $system = new Windows();
+                break;
             default:
                 throw new \Exception('not support os type.');
                 break;

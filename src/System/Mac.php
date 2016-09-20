@@ -10,7 +10,6 @@ class Mac implements VpnInterface
     public function getServers()
     {
         $servers = [];
-
         // /Library/Preferences/com.apple.networkextension.plist IKEv2 support
         $plist = new CFPropertyList('/Library/Preferences/SystemConfiguration/preferences.plist');
         $plist = $plist->toArray();
@@ -118,7 +117,7 @@ class Mac implements VpnInterface
 
     public function connection($vpn_connection_name)
     {
-        $shell =  sprintf('scutil --nc start "%s"', $vpn_connection_name);
+        $shell = sprintf('scutil --nc start "%s"', $vpn_connection_name);
 
         exec($shell, $result, $result_code);
 
