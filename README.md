@@ -61,6 +61,7 @@ Available commands:
   run         Ping test all vpn servers and connection the fastest one
   servers     Displays all vpn servers
 ```
+
 ## License
 
 MIT
