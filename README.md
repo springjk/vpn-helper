@@ -51,7 +51,7 @@ Options:
       --ansi            Force ANSI output
       --no-ansi         Disable ANSI output
   -n, --no-interaction  Do not ask any interactive question
-  -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -v|vv|vvv, --verbose  Increase the verbosity of messages
 
 Available commands:
   connection  Connection a vpn server by connection name
