@@ -118,11 +118,25 @@ class Mac implements VpnInterface
 
     public function connection($vpn_connection_name)
     {
-        $shell = sprintf('scutil --nc start "%s"', $vpn_connection_name);
+        //     $shell = sprintf('scutil --nc start "%s"', $vpn_connection_name);
+        //     exec($shell, $result, $result_code);
+        $scpt_code_templete = [
+            'tell application "System Events"',
+            'tell current location of network preferences',
+            'set VPNservice to service "' . $vpn_connection_name . '" -- name of the VPN service',
+            'if exists VPNservice then connect VPNservice',
+            'end tell',
+            'end tell',
+        ];
+        $scpt_code = 'osascript';
 
-        exec($shell, $result, $result_code);
+        foreach ($scpt_code_templete as $key => $value) {
+            $scpt_code .= ' -e \'' . $value . '\'';
+        }
 
-        if ($result_code === 0) {
+        exec($scpt_code, $result);
+
+        if (!empty($result)) {
             return true;
         } else {
             return false;
