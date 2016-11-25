@@ -8,7 +8,7 @@ Test VPN servers and connection the fastest one.
 
 ## Background
 
-A lot of VPN providers provide us multiple servers, but they don't provide a speed test tool to get the fastest of servers. Even if we can use `ping` to test, regrettably the complex network environment in many cases make the server constantly changing line delay, Then use `VPN Helper` can quickly connect the fastest one.
+In most cases VPN providers provide us multiple servers, but they don't provide a speed test tool to get the fastest of servers. Even if we can use `ping` to test, regrettably the complex network environment in many cases make the server constantly changing line delay, Then use `VPN Helper` can quickly connect the fastest one.
 
 ## Requirement
 
