@@ -1,6 +1,10 @@
 # VPN Helper
 
-Test VPN servers and connection the fastest one. [中文](https://github.com/springjk/vpn-helper/blob/master/README-zh.md)
+README: [English](https://github.com/springjk/vpn-helper/blob/master/README.md) | [中文](https://github.com/springjk/vpn-helper/blob/master/README-zh.md)
+
+![](http://oac57xnsh.bkt.clouddn.com/vpn-helper.png)
+
+Test VPN servers and connection the fastest one.
 
 ## Background
 
@@ -35,7 +39,7 @@ $ vpn servers
 ``` shell
 $ vpn
 
-Vpn helper version v1.0.0 build 29d8b90
+Vpn helper version v1.2.0 build b5b6469
 
 Usage:
   command [options] [arguments]
@@ -47,16 +51,16 @@ Options:
       --ansi            Force ANSI output
       --no-ansi         Disable ANSI output
   -n, --no-interaction  Do not ask any interactive question
-  -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -v|vv|vvv, --verbose  Increase the verbosity of messages
 
 Available commands:
-  help     Displays help for a command
-  list     Lists commands
-  run      Ping test all vpn server and connection the fastest one
-  servers  Displays local vpn server list
+  connection  Connection a vpn server by connection name
+  help        Displays help for a command
+  list        Lists commands
+  ping        Ping test all vpn servers and display result
+  run         Ping test all vpn servers and connection the fastest one
+  servers     Displays all vpn servers
 ```
-
-![](http://oac57xnsh.bkt.clouddn.com/vpn-helper.png)
 
 ## License
 
