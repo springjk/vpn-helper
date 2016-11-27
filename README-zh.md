@@ -1,10 +1,10 @@
 # VPN Helper
 
-README: [English](https://github.com/springjk/vpn-helper/blob/master/README.md) | [中文](https://github.com/springjk/vpn-helper/blob/master/README-zh.md)
-
 ![](http://oac57xnsh.bkt.clouddn.com/vpn-helper.png)
 
-测试 VPN 线路列表并连接延迟最低的线路。
+## 文档
+
+ [中文](https://github.com/springjk/vpn-helper/blob/master/README-zh.md) | [English](https://github.com/springjk/vpn-helper/blob/master/README.md)
 
 ## 背景
 
@@ -65,4 +65,3 @@ Available commands:
 ## 协议
 
 MIT
-

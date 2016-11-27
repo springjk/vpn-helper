@@ -1,10 +1,10 @@
 # VPN Helper
 
-README: [English](https://github.com/springjk/vpn-helper/blob/master/README.md) | [中文](https://github.com/springjk/vpn-helper/blob/master/README-zh.md)
-
 ![](http://oac57xnsh.bkt.clouddn.com/vpn-helper.png)
 
-Test VPN servers and connection the fastest one.
+## Document
+
+[English](https://github.com/springjk/vpn-helper/blob/master/README.md) | [中文](https://github.com/springjk/vpn-helper/blob/master/README-zh.md)
 
 ## Background
 
@@ -65,4 +65,3 @@ Available commands:
 ## License
 
 MIT
-
